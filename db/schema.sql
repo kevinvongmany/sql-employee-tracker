@@ -1,0 +1,41 @@
+DROP DATABASE IF EXISTS employees_db;
+CREATE DATABASE employees_db;
+
+\c employees_db;
+
+
+CREATE TABLE "department" (
+	"id" SERIAL NOT NULL UNIQUE,
+	"name" VARCHAR NOT NULL UNIQUE,
+	PRIMARY KEY("id")
+);
+
+
+CREATE TABLE "role" (
+	"id" SERIAL NOT NULL UNIQUE,
+	"title" VARCHAR NOT NULL UNIQUE,
+	"salary" DECIMAL NOT NULL,
+	"department" INTEGER NOT NULL,
+	PRIMARY KEY("id")
+);
+
+
+CREATE TABLE "employee" (
+	"id" SERIAL NOT NULL UNIQUE,
+	"first_name" VARCHAR NOT NULL,
+	"last_name" VARCHAR NOT NULL,
+	"role_id" INTEGER NOT NULL,
+	"manager_id" INTEGER,
+	PRIMARY KEY("id")
+);
+
+
+ALTER TABLE "role"
+ADD FOREIGN KEY("department") REFERENCES "department"("id")
+ON UPDATE NO ACTION ON DELETE NO ACTION;
+ALTER TABLE "employee"
+ADD FOREIGN KEY("role_id") REFERENCES "role"("id")
+ON UPDATE NO ACTION ON DELETE NO ACTION;
+ALTER TABLE "employee"
+ADD FOREIGN KEY("manager_id") REFERENCES "employee"("id")
+ON UPDATE NO ACTION ON DELETE NO ACTION;
