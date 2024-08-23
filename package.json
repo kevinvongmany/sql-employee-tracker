@@ -1,6 +1,6 @@
 {
   "name": "sql-employee-tracker",
-  "module": "server.js",
+  "module": "index.js",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest"
