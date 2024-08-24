@@ -1,5 +1,3 @@
-import { user } from "pg/lib/defaults";
-
 const { Pool } = require("pg");
 const inquirer = require("inquirer");
 const dotenv = require("dotenv");
