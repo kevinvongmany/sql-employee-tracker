@@ -86,6 +86,57 @@ const start = async () => {
   }
 };
 
+const viewData = async (tableName) => {
+    const data = await pool.query(`SELECT * FROM ${tableName}`);
+    console.table(data.rows);
+    start();
+};
 
+
+
+const deleteItem = async (tableName) => {
+    const items = await pool.query(`SELECT * FROM ${tableName}`);
+    console.table(items.rows);
+    const { item_id } = await inquirer.prompt({
+        type: "list",
+        name: "item_id",
+        message: `Which ${tableName} ID would you like to delete?`,
+        choices: items.rows.map((item) => ({
+            name: item.name,
+            value: item.id,
+        })),
+    });
+
+    const confirmation = await inquirer.prompt({
+        type: "confirm",
+        name: "choice",
+        message: `Are you sure you want to delete this ${tableName}?`,
+    });
+    if (confirmation.choice) {
+        console.log(`Deleting ${tableName}...`);
+        await pool.query(`DELETE FROM ${tableName} WHERE id = $1`, [item_id]);
+    }
+    start();
+};
+
+const viewBudgetUsage = async () => {
+    const departments = await pool.query("SELECT * FROM department");
+    const { department_id } = await inquirer.prompt({
+        type: "list",
+        name: "department_id",
+        message: "Which department's budget would you like to view?",
+        choices: departments.rows.map((department) => ({
+        name: department.name,
+        value: department.id,
+        })),
+    });
+    
+    const budget = await pool.query(
+        "SELECT SUM(salary) FROM role WHERE department = $1",
+        [department_id]
+    );
+    console.log(`The total budget for this department is $${budget.rows[0].sum}`);
+    start();
+};
 
 start();
