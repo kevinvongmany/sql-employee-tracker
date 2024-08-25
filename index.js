@@ -168,7 +168,7 @@ const addRole = async () => {
   ]);
 
   await pool.query(
-    "INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)",
+    "INSERT INTO role (title, salary, department) VALUES ($1, $2, $3)",
     [title, salary, department_id]
   );
   console.log("Role added!");
@@ -315,7 +315,7 @@ const viewBudgetUsage = async () => {
   });
 
   const budget = await pool.query(
-    "SELECT SUM(salary) FROM role WHERE department = $1",
+    "SELECT SUM(salary) FROM role JOIN employee ON role.id = employee.role_id WHERE role.department = $1",
     [department_id]
   );
   console.log(`The total budget for this department is $${budget.rows[0].sum}`);
