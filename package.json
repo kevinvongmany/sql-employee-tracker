@@ -1,7 +1,6 @@
 {
   "name": "sql-employee-tracker",
   "module": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node index.js"
   },

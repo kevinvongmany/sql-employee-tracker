@@ -2,12 +2,26 @@
 CLI application that allows users to update PostgreSQL database through prompts within terminal window. This application was built using NodeJS, PostgreSQL and various other npm modules. A video demonstration can be found here: 
 
 ## Table of Contents
+- [Resources](#resources)
 - [Installation](#installation)
 - [Usage](#usage)
 - [License](#license)
 - [Contribution](#contribution)
-- [Tests](#tests)
 - [Questions](#questions)
+
+## Resources
+
+Outlined below are external and open source resources used to develop this application.
+
+| Resource | Description |
+| -------- | ----------- |
+| [NodeJS](https://nodejs.org/en) | Cross-platform JavaScript runtime environment |
+| [bun](https://bun.sh/) | Faster JavaScript runtime environment (npm/yarn alternative) |
+| [PostgreSQL](https://www.postgresql.org/) | Open source relational database application |
+| [Inquirer.js](https://www.npmjs.com/package/inquirer) | Interactive command line user prompt module |
+| [node-postgres](https://www.npmjs.com/package/pg) | PostgreSQL client module for NodeJS |
+| [dotenv](https://www.npmjs.com/package/dotenv) | Environment variable loader package using .env files for NodeJS |
+
 
 ## Installation
 Clone this repository and ensure NodeJS, npm (or any npm alternative such as yarn or bun) and PostgreSQL 16.4 is installed.
@@ -41,9 +55,6 @@ This project is licensed under the [MIT](https://opensource.org/licenses/MIT) li
 
 ## Contribution
 Fork this repository and submit a Pull Request!
-
-## Tests
-
 
 ## Questions
 
