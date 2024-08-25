@@ -19,32 +19,32 @@ const start = async () => {
     message: "What would you like to do?",
     choices: [
       "View all employees",
-      "View all departments",
-      "View all roles",
       "Add employee",
-      "Add department",
-      "Add role",
       "Update employee role",
       "Update employee manager",
       "View employees by manager",
-      "View employees by department",
-      "Delete department",
       "Delete employee",
-      "Delete role",
+      "View all departments",
+      "Add department",
+      "Delete department",
+      "View employees by department",
       "View department budget utilisation",
+      "View all roles",
+      "Add role",
+      "Delete role",
       "Exit",
     ],
   });
 
   switch (action) {
     case "View all employees":
-        viewData("employee");
+      viewData("employee");
       break;
     case "View all departments":
-        viewData("department");
+      viewData("department");
       break;
     case "View all roles":
-        viewData("role");
+      viewData("role");
       break;
     case "Add employee":
       addEmployee();
@@ -65,29 +65,29 @@ const start = async () => {
       viewEmployeesByManager();
       break;
     case "View employees by department":
-        viewEmployeesByDepartment();
-        break;
+      viewEmployeesByDepartment();
+      break;
     case "Delete department":
-        deleteItem('department');
-        break;
+      deleteItem("department");
+      break;
     case "Delete employee":
-        deleteItem('employee');
-        break;
+      deleteItem("employee");
+      break;
     case "Delete role":
-        deleteItem('role');
-        break;
+      deleteItem("role");
+      break;
     case "View department budget utilisation":
-        viewBudgetUsage();
-        break;
+      viewBudgetUsage();
+      break;
     case "Exit":
       process.exit();
   }
 };
 
 const viewData = async (tableName) => {
-    const data = await pool.query(`SELECT * FROM ${tableName}`);
-    console.table(data.rows);
-    start();
+  const data = await pool.query(`SELECT * FROM ${tableName}`);
+  console.table(data.rows);
+  start();
 };
 
 const addEmployee = async () => {
@@ -238,88 +238,88 @@ const updateEmployeeManager = async () => {
 };
 
 const viewEmployeesByManager = async () => {
-    const employees = await pool.query("SELECT * FROM employee");
-    const { manager_id } = await inquirer.prompt({
-        type: "list",
-        name: "manager_id",
-        message: "Which manager's employees would you like to view?",
-        choices: employees.rows.map((employee) => ({
-        name: `${employee.first_name} ${employee.last_name}`,
-        value: employee.id,
-        })),
-    });
-    
-    const managerEmployees = await pool.query(
-        "SELECT * FROM employee WHERE manager_id = $1",
-        [manager_id]
-    );
-    console.table(managerEmployees.rows);
-    start();
+  const employees = await pool.query("SELECT * FROM employee");
+  const { manager_id } = await inquirer.prompt({
+    type: "list",
+    name: "manager_id",
+    message: "Which manager's employees would you like to view?",
+    choices: employees.rows.map((employee) => ({
+      name: `${employee.first_name} ${employee.last_name}`,
+      value: employee.id,
+    })),
+  });
+
+  const managerEmployees = await pool.query(
+    "SELECT * FROM employee WHERE manager_id = $1",
+    [manager_id]
+  );
+  console.table(managerEmployees.rows);
+  start();
 };
 
 const viewEmployeesByDepartment = async () => {
-    const departments = await pool.query("SELECT * FROM department");
-    const { department_id } = await inquirer.prompt({
-        type: "list",
-        name: "department_id",
-        message: "Which department's employees would you like to view?",
-        choices: departments.rows.map((department) => ({
-        name: department.name,
-        value: department.id,
-        })),
-    });
-    
-    const departmentEmployees = await pool.query(
-        "SELECT * FROM employee WHERE role_id IN (SELECT id FROM role WHERE department = $1)",
-        [department_id]
-    );
-    console.table(departmentEmployees.rows);
-    start();
+  const departments = await pool.query("SELECT * FROM department");
+  const { department_id } = await inquirer.prompt({
+    type: "list",
+    name: "department_id",
+    message: "Which department's employees would you like to view?",
+    choices: departments.rows.map((department) => ({
+      name: department.name,
+      value: department.id,
+    })),
+  });
+
+  const departmentEmployees = await pool.query(
+    "SELECT * FROM employee WHERE role_id IN (SELECT id FROM role WHERE department = $1)",
+    [department_id]
+  );
+  console.table(departmentEmployees.rows);
+  start();
 };
 
 const deleteItem = async (tableName) => {
-    const items = await pool.query(`SELECT * FROM ${tableName}`);
-    console.table(items.rows);
-    const { item_id } = await inquirer.prompt({
-        type: "list",
-        name: "item_id",
-        message: `Which ${tableName} ID would you like to delete?`,
-        choices: items.rows.map((item) => ({
-            name: item.name,
-            value: item.id,
-        })),
-    });
+  const items = await pool.query(`SELECT * FROM ${tableName}`);
+  console.table(items.rows);
+  const { item_id } = await inquirer.prompt({
+    type: "list",
+    name: "item_id",
+    message: `Which ${tableName} ID would you like to delete?`,
+    choices: items.rows.map((item) => ({
+      name: item.name,
+      value: item.id,
+    })),
+  });
 
-    const confirmation = await inquirer.prompt({
-        type: "confirm",
-        name: "choice",
-        message: `Are you sure you want to delete this ${tableName}?`,
-    });
-    if (confirmation.choice) {
-        console.log(`Deleting ${tableName}...`);
-        await pool.query(`DELETE FROM ${tableName} WHERE id = $1`, [item_id]);
-    }
-    start();
+  const confirmation = await inquirer.prompt({
+    type: "confirm",
+    name: "choice",
+    message: `Are you sure you want to delete this ${tableName}?`,
+  });
+  if (confirmation.choice) {
+    console.log(`Deleting ${tableName}...`);
+    await pool.query(`DELETE FROM ${tableName} WHERE id = $1`, [item_id]);
+  }
+  start();
 };
 
 const viewBudgetUsage = async () => {
-    const departments = await pool.query("SELECT * FROM department");
-    const { department_id } = await inquirer.prompt({
-        type: "list",
-        name: "department_id",
-        message: "Which department's budget would you like to view?",
-        choices: departments.rows.map((department) => ({
-        name: department.name,
-        value: department.id,
-        })),
-    });
-    
-    const budget = await pool.query(
-        "SELECT SUM(salary) FROM role WHERE department = $1",
-        [department_id]
-    );
-    console.log(`The total budget for this department is $${budget.rows[0].sum}`);
-    start();
+  const departments = await pool.query("SELECT * FROM department");
+  const { department_id } = await inquirer.prompt({
+    type: "list",
+    name: "department_id",
+    message: "Which department's budget would you like to view?",
+    choices: departments.rows.map((department) => ({
+      name: department.name,
+      value: department.id,
+    })),
+  });
+
+  const budget = await pool.query(
+    "SELECT SUM(salary) FROM role WHERE department = $1",
+    [department_id]
+  );
+  console.log(`The total budget for this department is $${budget.rows[0].sum}`);
+  start();
 };
 
 start();
