@@ -1,5 +1,7 @@
 # SQL Employee Tracker
-CLI application that allows users to update PostgreSQL database through prompts within terminal window. This application was built using NodeJS, PostgreSQL and various other npm modules. A video demonstration can be found here: 
+CLI application that allows users to update PostgreSQL database through prompts within terminal window. This application was built using NodeJS, PostgreSQL and various other npm modules. 
+
+A video demonstration can be found here: https://youtu.be/65Ht8_svO5M
 
 ## Table of Contents
 - [Resources](#resources)
